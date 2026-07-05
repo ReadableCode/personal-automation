@@ -1,0 +1,12 @@
+__pycache__/
+archive/
+data/
+logs/
+.env
+.env*
+*.env
+!template*.env
+desktop.ini
+.venv
+.DS_Store
+*.egg-info/
