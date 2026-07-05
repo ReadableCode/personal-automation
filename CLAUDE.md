@@ -42,9 +42,10 @@ uv run mypy .                # ignore_missing_imports = true
 - **No secrets in the repo.** `.env` is a symlink to
   `../personal_credentials/personal.env` and is gitignored — keep it that way;
   never inline credential values.
-- This repo is **local/unpublished** until Jason decides otherwise; if it is
-  ever pushed, it defaults to a private remote (it orbits credentialed
-  services). Do not create remotes or push without being asked.
+- This repo is **public** (`github.com/ReadableCode/personal-automation`).
+  It orbits credentialed services, so the no-secrets rule is absolute:
+  credentials only ever come from the gitignored `.env`; scan anything you
+  commit for secrets, IPs, and internal hostnames.
 - Match nearby code style; run isort before committing; respect flake8's
   120-char lines.
 - Vendored `src/utils/` modules: prefer keeping them byte-identical to their

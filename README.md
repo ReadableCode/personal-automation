@@ -11,9 +11,10 @@ machines:
 | `src/utils/` | **Vendored from dotfiles** `src/utils/` — see below. |
 | `src/config.py` | Trimmed copy of dotfiles `src/config.py` (path variables + data dir creation). |
 
-This repo is **local and unpublished**. Jason decides if/when it gets a
-remote; if pushed, default to a **private** repo (it orbits credentialed
-services). No secrets are committed — see `.env` below.
+This repo is **public** (published 2026-07-05 after a secrets scan of all
+files and git history). It orbits credentialed services, so nothing secret
+is ever committed — all credentials come from the gitignored `.env` symlink;
+see below.
 
 ## Vendored `src/utils/` modules
 
@@ -163,9 +164,8 @@ Per host that runs the Bitwarden backup (known from existing exports: `envy`;
 plus any other machine you have built `dotfiles-bitwarden_backup` on —
 check with `docker images | grep bitwarden`):
 
-1. [ ] Get this repo onto the host at `~/GitHub/personal-automation`
-       (it is local-only until you publish it — copy it over, or push it to a
-       **private** remote first; your call).
+1. [ ] Clone this repo onto the host:
+       `git clone git@github.com:ReadableCode/personal-automation.git ~/GitHub/personal-automation`
 2. [ ] `ln -s ../personal_credentials/personal.env .env` in the repo root.
 3. [ ] Rebuild the image from this repo with the new tag
        (`personal-automation-bitwarden_backup`) — commands above.
