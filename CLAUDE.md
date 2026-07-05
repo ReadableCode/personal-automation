@@ -12,8 +12,9 @@ homelab machines:
 - `src/bitwarden.py` — Bitwarden vault backup (runs via the
   `Dockerfile-bitwarden_backup` container; exports land in `data/` and are
   copied into the `personal_credentials` repo).
-- `src/parse_minecraft_logs.py` — pulls/streams Minecraft server logs from the
-  unRAID box over SSH; interactive analysis via the `# %%` code cells.
+
+(A Minecraft log tool briefly lived here too — retired 2026-07-05, in git
+history if ever wanted.)
 
 `src/utils/` is **vendored from dotfiles** `src/utils/` (see README); keep the
 package name `utils` so imports stay identical to dotfiles.

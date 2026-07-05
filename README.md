@@ -8,7 +8,6 @@ machines:
 | Path | Purpose |
 |------|---------|
 | `src/bitwarden.py` | Bitwarden vault backup (json + csv exports, per user and per org). Runs in the `Dockerfile-bitwarden_backup` container. |
-| `src/parse_minecraft_logs.py` | Pull / stream / chart Minecraft server logs from the unRAID box over SSH. |
 | `src/utils/` | **Vendored from dotfiles** `src/utils/` — see below. |
 | `src/config.py` | Trimmed copy of dotfiles `src/config.py` (path variables + data dir creation). |
 
@@ -50,9 +49,7 @@ ln -s ../personal_credentials/personal.env .env
 
 Variables used here: `BITWARDEN_URL`, `BITWARDEN_ORG_CONFIGS`,
 `BITWARDEN_USERNAME`/`BITWARDEN_PASSWORD` (+ `_SECONDARY` pair),
-`PERSONAL_CREDENTIALS_DIR` (optional override), `UNRAID_IP`,
-`UNRAID_USERNAME`, `UNRAID_PASSWORD`, `MINECRAFT_SERVER_USER_CONFIGS`,
-`LOG_LEVEL` (optional).
+`PERSONAL_CREDENTIALS_DIR` (optional override), `LOG_LEVEL` (optional).
 
 ## Bitwarden backup — Docker
 
@@ -145,28 +142,6 @@ bw export --organizationid {{ ORG_ID }} --output "/My_Backup/data/bitwarden_back
 # enter password
 ```
 
-## Minecraft server logs
-
-`src/parse_minecraft_logs.py` SSHes to the unRAID box (`UNRAID_IP` etc. from
-`.env`).
-
-- **Stream mode** (plain script run) — tails `latest.log` live, colorizing
-  player names per `MINECRAFT_SERVER_USER_CONFIGS`:
-
-  ```bash
-  uv run python src/parse_minecraft_logs.py
-  ```
-
-- **Analysis mode** — run the `# %%` cells in an interactive kernel (VS Code
-  / Jupyter): clones the logs via SCP into `data/minecraft_logs/`, builds a
-  pandas DataFrame of joins/leaves/chat, and plots player activity with
-  matplotlib. The kernel path needs `ipykernel`, which is deliberately not a
-  dependency here; add it locally if you want it:
-
-  ```bash
-  uv add --dev ipykernel
-  ```
-
 ## Lint
 
 ```bash
@@ -181,8 +156,8 @@ references either script** (checked all `triggers/crontab_extraction_*.txt`:
 behemoth, elitedesk, elitedesk_root, hellofreshjason, macmini14, nukbuntu,
 raspberrypi0/3/3a/4/4a (+roots), tower), and `docs/homelab_deployments.md` /
 `ansible_playbooks/` / `scripts/` / shell aliases reference neither. The only
-consumers were **manual, per the dotfiles README**: the Docker build/run for
-the Bitwarden backup, and interactive runs of `parse_minecraft_logs.py`.
+consumer was **manual, per the dotfiles README**: the Docker build/run for
+the Bitwarden backup.
 
 Per host that runs the Bitwarden backup (known from existing exports: `envy`;
 plus any other machine you have built `dotfiles-bitwarden_backup` on —
@@ -202,13 +177,6 @@ check with `docker images | grep bitwarden`):
        `data/` so history lives in one place (both `data/` dirs are
        gitignored).
 
-For the Minecraft tooling (wherever you run it — homelab workstation):
-
-7. [ ] Run it from this repo from now on
-       (`uv sync && uv run python src/parse_minecraft_logs.py`); dotfiles no
-       longer contains the script (and dotfiles' venv no longer has
-       matplotlib).
-
 Dotfiles side (already done in the `repo-improvements` branch, listed for
 awareness):
 
@@ -218,3 +186,8 @@ awareness):
   from `pyproject.toml`.
 - `src/utils/` (including `json_tools.py`, whose normalizer the backup uses)
   **stays in dotfiles** — this repo vendors its own copies.
+
+Retired: `parse_minecraft_logs.py` (moved here 2026-07-05, deleted the same
+day — no longer needed). Its exclusive deps (`matplotlib`, `paramiko`, `scp`)
+and `.env` variables (`UNRAID_*`, `MINECRAFT_SERVER_USER_CONFIGS`) were
+removed with it; recover from git history if ever wanted.
