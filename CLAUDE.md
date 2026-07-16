@@ -22,8 +22,10 @@ homelab machines:
 (A Minecraft log tool briefly lived here too — retired 2026-07-05, in git
 history if ever wanted.)
 
-`src/utils/` is **vendored from dotfiles** `src/utils/` (see README); keep the
-package name `utils` so imports stay identical to dotfiles.
+Shared helpers come from the **readable-utils** package
+(github.com/ReadableCode/readable_utils), a git dependency pinned to a tag in
+`pyproject.toml` — imports are `from readable_utils.x import y`. No vendored
+copies remain.
 
 ## Python environment & tooling
 
@@ -54,6 +56,5 @@ uv run mypy .                # ignore_missing_imports = true
   commit for secrets, IPs, and internal hostnames.
 - Match nearby code style; run isort before committing; respect flake8's
   120-char lines.
-- Vendored `src/utils/` modules: prefer keeping them byte-identical to their
-  dotfiles counterparts (except the documented `date_tools.py` trim) so they
-  are easy to re-sync.
+- Shared-helper changes belong in the readable_utils repo (new tag), then
+  bump the pin here — never re-vendor copies.

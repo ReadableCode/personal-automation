@@ -12,7 +12,6 @@ machines:
 | `src/pull_router_configs.py` | Pulls router config over SSH+SCP (moved from dotfiles 2026-07-16; currently broken — router lacks sftp). |
 | `src/rotate_logs.py` | Weekly log rotation for `logs/` (moved from dotfiles `scripts/` 2026-07-16; import switched from `config_scripts` to `config`). |
 | `scripts/raspberrypi_temps.sh` | Live Raspberry Pi CPU-temp readout (moved from dotfiles 2026-07-16). |
-| `src/utils/` | **Vendored from dotfiles** `src/utils/` — see below. |
 | `src/config.py` | Trimmed copy of dotfiles `src/config.py` (path variables + data/log dir creation). |
 
 This repo is **public** (published 2026-07-05 after a secrets scan of all
@@ -20,19 +19,17 @@ files and git history). It orbits credentialed services, so nothing secret
 is ever committed — all credentials come from the gitignored `.env` symlink;
 see below.
 
-## Vendored `src/utils/` modules
+## Shared utils: `readable-utils` package
 
-Copied from dotfiles `src/utils/` so the moved jobs' imports are unchanged
-(`from utils.x import y`). Dotfiles keeps its own copies (other dotfiles
-scripts still use them); if you touch one here, consider syncing the change.
-
-| Module | Status |
-|--------|--------|
-| `config_utils.py` | verbatim copy |
-| `display_tools.py` | verbatim copy |
-| `host_tools.py` | verbatim copy |
-| `json_tools.py` | verbatim copy |
-| `date_tools.py` | **trimmed**: only `get_datetime_format_string` / `get_current_datetime` (all `bitwarden.py` uses). The full module builds week/day lookup tables from committed CSVs at import time and raises `KeyError` once today's date is past the CSVs — a bad failure mode for an unattended backup job, so the tables were deliberately not vendored. |
+The shared helpers (`display_tools`, `date_tools`, `host_tools`,
+`json_tools`, `config_utils`) come from the
+[readable_utils](https://github.com/ReadableCode/readable_utils) package —
+a git dependency pinned to a tag in `pyproject.toml` / `uv.lock` (the
+vendored `src/utils/` copies were retired 2026-07-16). Since v0.1.2 the
+package has no import-time side effects, and `date_tools` no longer raises
+on import when today's date is past its committed CSVs — the failure mode
+that originally forced a trimmed vendored copy here. To pick up a newer
+version: bump the tag in `[tool.uv.sources]`, then `uv lock && uv sync`.
 
 ## Setup
 

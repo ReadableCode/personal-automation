@@ -7,7 +7,7 @@ import paramiko
 from config import parent_dir
 from scp import SCPClient
 from dotenv import load_dotenv
-from utils.display_tools import print_logger
+from readable_utils.display_tools import print_logger
 
 # %%
 # Variables #
