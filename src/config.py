@@ -3,7 +3,7 @@
 
 # Vendored/trimmed from dotfiles src/config.py — keeps the same path variables the
 # moved jobs import, drops the directories only the dotfiles stack used
-# (templates/, logs/, download caches).
+# (templates/, download caches).
 
 import os
 import sys
@@ -16,12 +16,14 @@ grandparent_dir = os.path.dirname(parent_dir)
 
 data_dir = os.path.join(parent_dir, "data")
 data_dir_archive = os.path.join(parent_dir, "data", "archive")
+log_dir = os.path.join(parent_dir, "logs")
 src_dir = os.path.join(parent_dir, "src")
 src_utils_dir = os.path.join(src_dir, "utils")
 
 directories = [
     data_dir,
     data_dir_archive,
+    log_dir,
     src_dir,
     src_utils_dir,
 ]

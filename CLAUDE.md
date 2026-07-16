@@ -12,6 +12,12 @@ homelab machines:
 - `src/bitwarden.py` — Bitwarden vault backup (runs via the
   `Dockerfile-bitwarden_backup` container; exports land in `data/` and are
   copied into the `personal_credentials` repo).
+- `src/pull_home_assistant_configs.py` / `src/pull_router_configs.py` —
+  device config backups over SSH+SCP (moved from dotfiles 2026-07-16;
+  brought `paramiko`/`scp` back into `pyproject.toml`).
+- `src/rotate_logs.py` — weekly rotation of `logs/` (moved from dotfiles
+  `scripts/`; imports `log_dir` from this repo's `src/config.py`).
+- `scripts/raspberrypi_temps.sh` — live Pi CPU-temp readout.
 
 (A Minecraft log tool briefly lived here too — retired 2026-07-05, in git
 history if ever wanted.)

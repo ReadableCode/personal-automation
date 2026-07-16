@@ -8,8 +8,12 @@ machines:
 | Path | Purpose |
 |------|---------|
 | `src/bitwarden.py` | Bitwarden vault backup (json + csv exports, per user and per org). Runs in the `Dockerfile-bitwarden_backup` container. |
+| `src/pull_home_assistant_configs.py` | Backs up Home Assistant config/storage over SSH+SCP (moved from dotfiles 2026-07-16). |
+| `src/pull_router_configs.py` | Pulls router config over SSH+SCP (moved from dotfiles 2026-07-16; currently broken — router lacks sftp). |
+| `src/rotate_logs.py` | Weekly log rotation for `logs/` (moved from dotfiles `scripts/` 2026-07-16; import switched from `config_scripts` to `config`). |
+| `scripts/raspberrypi_temps.sh` | Live Raspberry Pi CPU-temp readout (moved from dotfiles 2026-07-16). |
 | `src/utils/` | **Vendored from dotfiles** `src/utils/` — see below. |
-| `src/config.py` | Trimmed copy of dotfiles `src/config.py` (path variables + data dir creation). |
+| `src/config.py` | Trimmed copy of dotfiles `src/config.py` (path variables + data/log dir creation). |
 
 This repo is **public** (published 2026-07-05 after a secrets scan of all
 files and git history). It orbits credentialed services, so nothing secret
@@ -51,6 +55,8 @@ ln -s ../personal_credentials/personal.env .env
 Variables used here: `BITWARDEN_URL`, `BITWARDEN_ORG_CONFIGS`,
 `BITWARDEN_USERNAME`/`BITWARDEN_PASSWORD` (+ `_SECONDARY` pair),
 `PERSONAL_CREDENTIALS_DIR` (optional override), `LOG_LEVEL` (optional).
+The device-pull scripts additionally use `ROUTER_IP`/`ROUTER_USERNAME` and
+`HOME_ASSISTANT_IP`/`HOME_ASSISTANT_USERNAME`/`HOME_ASSISTANT_PASSWORD`.
 
 ## Bitwarden backup — Docker
 
@@ -153,9 +159,8 @@ uv run isort .    # black profile
 ## Cutover checklist (Jason executes — nothing here happens automatically)
 
 Full consumer audit of dotfiles done 2026-07-05: **no crontab on any host
-references either script** (checked all `triggers/crontab_extraction_*.txt`:
-behemoth, elitedesk, elitedesk_root, hellofreshjason, macmini14, nukbuntu,
-raspberrypi0/3/3a/4/4a (+roots), tower), and `docs/homelab_deployments.md` /
+references either script** (checked all `triggers/crontab_extraction_*.txt`
+host snapshots), and `docs/homelab_deployments.md` /
 `ansible_playbooks/` / `scripts/` / shell aliases reference neither. The only
 consumer was **manual, per the dotfiles README**: the Docker build/run for
 the Bitwarden backup.
